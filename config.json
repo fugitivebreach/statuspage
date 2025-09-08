@@ -64,6 +64,15 @@
       "CategoryID": [4],
       "StartedAt": 1725749130,
       "FixedAt": 1725752730
+    },
+    {
+      "StatusTitle": "Copyright Issues",
+      "StatusDescription": "All services will continue to be operational while we resolve any non-explicit copyright formats loaded on the bot.",
+      "By": "System Monitor",
+      "StatusID": [2],
+      "CategoryID": [1, 5],
+      "StartedAt": 1757271600,
+      "FixedAt": 1757278800
     }
   ]
 }
