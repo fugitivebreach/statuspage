@@ -48,7 +48,7 @@
     {
       "StatusTitle": "All Systems Operational",
       "StatusDescription": "All services are running normally with no reported issues.",
-      "By": "System Monitor",
+      "By": "ffugitivebbreach",
       "StatusID": [1],
       "CategoryID": [1, 2, 4, 5],
       "StartedAt": 1725835530,
@@ -59,7 +59,7 @@
     {
       "StatusTitle": "Database Connection Issues",
       "StatusDescription": "Temporary database connectivity issues affecting user verification and ranking systems.",
-      "By": "DevOps Team",
+      "By": "ffugitivebbreach",
       "StatusID": [3, 6],
       "CategoryID": [4],
       "StartedAt": 1725749130,
@@ -68,7 +68,7 @@
     {
       "StatusTitle": "Copyright Issues",
       "StatusDescription": "All services will continue to be operational while we resolve any non-explicit copyright formats loaded on the bot.",
-      "By": "System Monitor",
+      "By": "ffugitivebbreach",
       "StatusID": [2],
       "CategoryID": [2],
       "StartedAt": 1757271600,
