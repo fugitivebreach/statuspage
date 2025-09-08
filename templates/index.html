@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Guard Status</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #1a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b35 50%, #dc143c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #cccccc;
+            font-weight: 300;
+        }
+
+        .overall-status {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .overall-status h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ffd700;
+        }
+
+        .uptime-display {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ff88;
+            margin-bottom: 0.5rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b35 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .status-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .status-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+        .status-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.1);
+        }
+
+        .status-item.operational {
+            border-left-color: #00ff88;
+        }
+
+        .status-item.degraded {
+            border-left-color: #ffaa00;
+        }
+
+        .status-item.partial-outage {
+            border-left-color: #ff6b35;
+        }
+
+        .status-item.major-outage {
+            border-left-color: #dc143c;
+        }
+
+        .status-item.maintenance {
+            border-left-color: #6366f1;
+        }
+
+        .status-item.investigating {
+            border-left-color: #ffd700;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .service-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .service-item:hover {
+            border-color: rgba(255, 215, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .service-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .service-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .service-status.operational {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+
+        .service-status.issues {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+        }
+
+        .uptime-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .uptime-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff88 0%, #ffd700 100%);
+            border-radius: 4px;
+        }
+
+        .uptime-text {
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+
+        .status-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+
+        .status-tag {
+            background: rgba(255, 215, 0, 0.1);
+            color: #ffd700;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .no-statuses {
+            text-align: center;
+            padding: 3rem;
+            color: #888888;
+            font-size: 1.1rem;
+        }
+
+        .incident-item {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #666666;
+        }
+
+        .incident-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .incident-title {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .incident-date {
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+
+        .incident-description {
+            color: #cccccc;
+            margin-bottom: 1rem;
+        }
+
+        .incident-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+
+        .response-time {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .response-time h3 {
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+        }
+
+        .response-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ff88;
+        }
+
+        .timeline-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-title {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .timeline-legend {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.green { background: #00ff88; }
+        .legend-dot.yellow { background: #ffaa00; }
+        .legend-dot.red { background: #dc143c; }
+
+        .timeline-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(8px, 1fr));
+            gap: 2px;
+            max-width: 100%;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-day {
+            width: 8px;
+            height: 20px;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .timeline-day.green { background: #00ff88; }
+        .timeline-day.yellow { background: #ffaa00; }
+        .timeline-day.red { background: #dc143c; }
+
+        .timeline-day:hover {
+            transform: scaleY(1.5);
+            z-index: 10;
+        }
+
+        .timeline-day.clickable:hover {
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .timeline-day:hover .tooltip {
+            opacity: 1;
+        }
+
+        .timeline-months {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaaaaa;
+            margin-top: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .incident-header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Royal Guard Status</h1>
+            <p>Real-time status and performance monitoring</p>
+        </div>
+
+        {% if show_statuses %}
+            <div class="overall-status">
+                <h2>Overall System Status</h2>
+                <div class="uptime-display">{{ "%.2f"|format(overall_uptime) }}% Uptime</div>
+                <p>All systems operational</p>
+            </div>
+
+            <div class="response-time">
+                <h3>API Response Time</h3>
+                <div class="response-value">{{ current_response_time or 0 }} ms</div>
+            </div>
+
+            <div class="timeline-section">
+                <div class="timeline-header">
+                    <div class="timeline-title">Past 90 Days</div>
+                    <div class="timeline-legend">
+                        <div class="legend-item">
+                            <div class="legend-dot green"></div>
+                            <span>Operational</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot yellow"></div>
+                            <span>Issues</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-dot red"></div>
+                            <span>Outages</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-grid">
+                    {% for day in history_data %}
+                    <div class="timeline-day {{ day.status|get_day_status_color }} {% if day.incidents %}clickable{% endif %}" 
+                         data-date="{{ day.date }}" 
+                         data-status="{{ day.status }}"
+                         data-incidents="{{ day.incidents|length }}"
+                         data-has-incidents="{% if day.incidents %}true{% else %}false{% endif %}">
+                        <div class="tooltip">
+                            {% if day.incidents %}
+                                {{ day.incidents|length }} incident{% if day.incidents|length > 1 %}s{% endif %} on {{ day.date }}
+                            {% else %}
+                                No downtime recorded on {{ day.date }}
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="timeline-months">
+                    <span>90 days ago</span>
+                    <span>60 days ago</span>
+                    <span>30 days ago</span>
+                    <span>Today</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">System Metrics</h2>
+                <div class="service-grid">
+                    {% for category in categories %}
+                    <div class="service-item">
+                        <div class="service-header">
+                            <div class="service-name">{{ category.name }}</div>
+                            <div class="service-status {{ category.status_class }}">
+                                {{ category.status }}
+                            </div>
+                        </div>
+                        <div class="uptime-bar">
+                            <div class="uptime-fill" data-width="{{ category.uptime }}"></div>
+                        </div>
+                        <div class="uptime-text">{{ "%.2f"|format(category.uptime) }}% uptime</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            {% if current_statuses %}
+            <div class="section">
+                <h2 class="section-title">Current Status Updates</h2>
+                <div class="status-grid">
+                    {% for status in current_statuses %}
+                    <div class="status-item {{ status.color_class }}">
+                        <h3>{{ status.title }}</h3>
+                        <p>{{ status.description }}</p>
+                        <div class="status-meta">
+                            <span>By: {{ status.by }}</span>
+                            <span>Started: {{ status.started_at }}</span>
+                        </div>
+                        <div class="status-meta">
+                            {% for status_name in status.status_names %}
+                            <span class="status-tag">{{ status_name }}</span>
+                            {% endfor %}
+                            {% for category_name in status.category_names %}
+                            <span class="status-tag">{{ category_name }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if past_incidents %}
+            <div class="section">
+                <h2 class="section-title">Past Incidents</h2>
+                {% for incident in past_incidents %}
+                <div class="incident-item">
+                    <div class="incident-header">
+                        <div class="incident-title">{{ incident.title }}</div>
+                        <div class="incident-date">{{ incident.started_at }}</div>
+                    </div>
+                    <div class="incident-description">{{ incident.description }}</div>
+                    <div class="incident-meta">
+                        <div>
+                            {% for status_name in incident.status_names %}
+                            <span class="status-tag">{{ status_name }}</span>
+                            {% endfor %}
+                            {% for category_name in incident.category_names %}
+                            <span class="status-tag">{{ category_name }}</span>
+                            {% endfor %}
+                        </div>
+                        <div>Resolved: {{ incident.fixed_at }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+        {% else %}
+            <div class="no-statuses">
+                {{ message }}
+            </div>
+        {% endif %}
+    </div>
+    <script>
+        // Apply uptime bar widths from data attributes
+        document.addEventListener('DOMContentLoaded', function() {
+            const uptimeFills = document.querySelectorAll('.uptime-fill[data-width]');
+            uptimeFills.forEach(function(fill) {
+                const width = fill.getAttribute('data-width');
+                fill.style.width = width + '%';
+            });
+
+            // Handle timeline day clicks
+            const timelineDays = document.querySelectorAll('.timeline-day');
+            timelineDays.forEach(function(day) {
+                day.addEventListener('click', function() {
+                    const hasIncidents = this.getAttribute('data-has-incidents') === 'true';
+                    const date = this.getAttribute('data-date');
+                    
+                    if (hasIncidents) {
+                        window.location.href = '/incident/' + date;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

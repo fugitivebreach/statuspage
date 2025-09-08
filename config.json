@@ -1,0 +1,69 @@
+{
+  "ShowStatuses": true,
+  "StatusCategories": [
+    {
+      "CategoryID": 1,
+      "CategoryName": "API"
+    },
+    {
+      "CategoryID": 2,
+      "CategoryName": "Discord Bot"
+    },
+    {
+      "CategoryID": 4,
+      "CategoryName": "Database"
+    },
+    {
+      "CategoryID": 5,
+      "CategoryName": "ROBLOX API"
+    }
+  ],
+  "StatusTypes": [
+    {
+      "StatusID": 1,
+      "Status": "Operational"
+    },
+    {
+      "StatusID": 2,
+      "Status": "Degraded Performance"
+    },
+    {
+      "StatusID": 3,
+      "Status": "Partial Outage"
+    },
+    {
+      "StatusID": 4,
+      "Status": "Major Outage"
+    },
+    {
+      "StatusID": 5,
+      "Status": "Under Maintenance"
+    },
+    {
+      "StatusID": 6,
+      "Status": "Investigating"
+    }
+  ],
+  "CurrentStatuses": [
+    {
+      "StatusTitle": "All Systems Operational",
+      "StatusDescription": "All services are running normally with no reported issues.",
+      "By": "System Monitor",
+      "StatusID": [1],
+      "CategoryID": [1, 2, 4, 5],
+      "StartedAt": 1725835530,
+      "FixedAt": null
+    }
+  ],
+  "PastIncidents": [
+    {
+      "StatusTitle": "Database Connection Issues",
+      "StatusDescription": "Temporary database connectivity issues affecting user verification and ranking systems.",
+      "By": "DevOps Team",
+      "StatusID": [3, 6],
+      "CategoryID": [4],
+      "StartedAt": 1725749130,
+      "FixedAt": 1725752730
+    }
+  ]
+}

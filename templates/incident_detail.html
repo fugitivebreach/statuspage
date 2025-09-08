@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Details - {{ date }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #1a0a0a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffd700 0%, #ff6b35 50%, #dc143c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #ff6b35;
+        }
+
+        .incident-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid;
+        }
+
+        .incident-card.degraded { border-left-color: #ffaa00; }
+        .incident-card.partial { border-left-color: #ff6b35; }
+        .incident-card.major { border-left-color: #dc143c; }
+        .incident-card.maintenance { border-left-color: #6366f1; }
+
+        .incident-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .incident-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .incident-date {
+            color: #aaaaaa;
+            font-size: 1rem;
+        }
+
+        .incident-type {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .incident-type.degraded {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+
+        .incident-type.partial {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+        }
+
+        .incident-type.major {
+            background: rgba(220, 20, 60, 0.2);
+            color: #dc143c;
+        }
+
+        .no-incidents {
+            text-align: center;
+            padding: 3rem;
+            color: #888888;
+            font-size: 1.1rem;
+        }
+
+        .not-found {
+            text-align: center;
+            padding: 3rem;
+            color: #ff6b35;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-button">
+            ← Back to Status Page
+        </a>
+
+        <div class="header">
+            <h1>Incident Details</h1>
+            <p>{{ date }}</p>
+        </div>
+
+        {% if not_found %}
+            <div class="not-found">
+                No data found for the specified date.
+            </div>
+        {% elif not incidents %}
+            <div class="no-incidents">
+                No incidents recorded on this day.
+            </div>
+        {% else %}
+            {% for incident in incidents %}
+            <div class="incident-card {{ incident.type }}">
+                <div class="incident-header">
+                    <div class="incident-title">{{ incident.title }}</div>
+                    <div class="incident-date">{{ date }}</div>
+                    <div class="incident-type {{ incident.type }}">
+                        {% if incident.type == 'degraded' %}
+                            Degraded Performance
+                        {% elif incident.type == 'partial' %}
+                            Partial Outage
+                        {% elif incident.type == 'major' %}
+                            Major Outage
+                        {% elif incident.type == 'maintenance' %}
+                            Under Maintenance
+                        {% else %}
+                            {{ incident.type|title }}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+</html>
