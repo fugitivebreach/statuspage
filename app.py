@@ -76,9 +76,9 @@ def get_health_endpoints():
     """Get health check endpoints from config"""
     config = load_config()
     endpoints = {
-        'API': 'https://royalguard-activity-api.up.railway.app/',  # Your actual Royal Guard API
+        'API': 'https://royalguard-api.up.railway.app/',  # Your actual Royal Guard API
         'Discord Bot': 'https://discord.com/api/v10/gateway',
-        'Database': 'https://discord.com/api/v10/gateway/bot',  # Using Discord API as DB proxy
+        'Database': 'https://royalguard-api.up.railway.app/',  # Database health via API health check
         'ROBLOX API': 'https://api.roblox.com/'
     }
     return endpoints
@@ -149,35 +149,114 @@ def calculate_uptime():
     return round((operational_services / total_services) * 100, 2)
 
 def generate_90_day_history():
-    """Generate 90 days of historical status data"""
+    """Generate 90 days of historical status data from real incidents"""
+    config = load_config()
     history = []
     today = datetime.now()
     
+    # Create a dictionary to map dates to incidents
+    incident_map = {}
+    
+    # Process past incidents from config
+    for incident in config.get('PastIncidents', []):
+        if incident.get('StartedAt'):
+            incident_date = datetime.fromtimestamp(incident['StartedAt'])
+            date_str = incident_date.strftime('%Y-%m-%d')
+            
+            # Determine status based on StatusID
+            status_ids = incident.get('StatusID', [])
+            if 4 in status_ids:  # Major Outage
+                status = 'major'
+                incident_type = 'major'
+            elif 3 in status_ids:  # Partial Outage
+                status = 'partial'
+                incident_type = 'partial'
+            elif 2 in status_ids:  # Degraded Performance
+                status = 'degraded'
+                incident_type = 'degraded'
+            elif 5 in status_ids:  # Under Maintenance
+                status = 'maintenance'
+                incident_type = 'maintenance'
+            else:
+                status = 'investigating'
+                incident_type = 'investigating'
+            
+            if date_str not in incident_map:
+                incident_map[date_str] = {
+                    'status': status,
+                    'incidents': []
+                }
+            
+            incident_map[date_str]['incidents'].append({
+                'title': incident.get('StatusTitle', 'Unknown Incident'),
+                'type': incident_type,
+                'description': incident.get('StatusDescription', ''),
+                'by': incident.get('By', ''),
+                'started_at': incident.get('StartedAt'),
+                'fixed_at': incident.get('FixedAt')
+            })
+    
+    # Process current unresolved statuses
+    for status in config.get('CurrentStatuses', []):
+        if not status.get('FixedAt') and status.get('StartedAt'):
+            incident_date = datetime.fromtimestamp(status['StartedAt'])
+            date_str = incident_date.strftime('%Y-%m-%d')
+            
+            # Determine status based on StatusID
+            status_ids = status.get('StatusID', [])
+            if 4 in status_ids:
+                current_status = 'major'
+                incident_type = 'major'
+            elif 3 in status_ids:
+                current_status = 'partial'
+                incident_type = 'partial'
+            elif 2 in status_ids:
+                current_status = 'degraded'
+                incident_type = 'degraded'
+            elif 5 in status_ids:
+                current_status = 'maintenance'
+                incident_type = 'maintenance'
+            else:
+                current_status = 'investigating'
+                incident_type = 'investigating'
+            
+            if date_str not in incident_map:
+                incident_map[date_str] = {
+                    'status': current_status,
+                    'incidents': []
+                }
+            
+            incident_map[date_str]['incidents'].append({
+                'title': status.get('StatusTitle', 'Ongoing Issue'),
+                'type': incident_type,
+                'description': status.get('StatusDescription', ''),
+                'by': status.get('By', ''),
+                'started_at': status.get('StartedAt'),
+                'fixed_at': None
+            })
+    
+    # Generate 90 days of history
     for i in range(90):
         date = today - timedelta(days=i)
         date_str = date.strftime('%Y-%m-%d')
         
-        # Generate random status for demonstration (90% operational, 10% issues)
-        rand = random.random()
-        if rand < 0.90:
-            status = 'operational'
-            incidents = []
-        elif rand < 0.95:
-            status = 'degraded'
-            incidents = [{'title': 'Minor performance issues', 'type': 'degraded'}]
-        elif rand < 0.98:
-            status = 'partial'
-            incidents = [{'title': 'Service disruption', 'type': 'partial'}]
+        if date_str in incident_map:
+            # Use real incident data
+            day_data = incident_map[date_str]
+            history.append({
+                'date': date_str,
+                'status': day_data['status'],
+                'incidents': day_data['incidents'],
+                'timestamp': int(date.timestamp())
+            })
         else:
-            status = 'major'
-            incidents = [{'title': 'System outage', 'type': 'major'}]
-        
-        history.append({
-            'date': date_str,
-            'status': status,
-            'incidents': incidents,
-            'timestamp': int(date.timestamp())
-        })
+            # Operational day
+            history.append({
+                'date': date_str,
+                'status': 'operational',
+                'incidents': [],
+                'timestamp': int(date.timestamp())
+            })
     
     return list(reversed(history))  # Return chronologically
 
@@ -292,24 +371,76 @@ def index():
 @app.route('/incident/<date>')
 def incident_detail(date):
     """Show incident details for a specific date"""
-    history_data = generate_90_day_history()
-    day_data = None
+    config = load_config()
+    incidents_for_date = []
     
-    for day in history_data:
-        if day['date'] == date:
-            day_data = day
-            break
+    # Check past incidents for this date
+    for incident in config.get('PastIncidents', []):
+        if incident.get('StartedAt'):
+            incident_date = datetime.fromtimestamp(incident['StartedAt'])
+            if incident_date.strftime('%Y-%m-%d') == date:
+                # Determine incident type from StatusID
+                status_ids = incident.get('StatusID', [])
+                if 4 in status_ids:
+                    incident_type = 'major'
+                elif 3 in status_ids:
+                    incident_type = 'partial'
+                elif 2 in status_ids:
+                    incident_type = 'degraded'
+                elif 5 in status_ids:
+                    incident_type = 'maintenance'
+                else:
+                    incident_type = 'investigating'
+                
+                incidents_for_date.append({
+                    'title': incident.get('StatusTitle', 'Unknown Incident'),
+                    'type': incident_type,
+                    'description': incident.get('StatusDescription', ''),
+                    'by': incident.get('By', ''),
+                    'started_at': format_timestamp(incident.get('StartedAt')),
+                    'fixed_at': format_timestamp(incident.get('FixedAt')),
+                    'status_names': [get_status_by_id(sid, config) for sid in status_ids],
+                    'category_names': [get_category_by_id(cid, config) for cid in incident.get('CategoryID', [])]
+                })
     
-    if not day_data:
+    # Check current statuses for this date
+    for status in config.get('CurrentStatuses', []):
+        if status.get('StartedAt') and not status.get('FixedAt'):
+            status_date = datetime.fromtimestamp(status['StartedAt'])
+            if status_date.strftime('%Y-%m-%d') == date:
+                # Determine status type from StatusID
+                status_ids = status.get('StatusID', [])
+                if 4 in status_ids:
+                    status_type = 'major'
+                elif 3 in status_ids:
+                    status_type = 'partial'
+                elif 2 in status_ids:
+                    status_type = 'degraded'
+                elif 5 in status_ids:
+                    status_type = 'maintenance'
+                else:
+                    status_type = 'investigating'
+                
+                incidents_for_date.append({
+                    'title': status.get('StatusTitle', 'Ongoing Issue'),
+                    'type': status_type,
+                    'description': status.get('StatusDescription', ''),
+                    'by': status.get('By', ''),
+                    'started_at': format_timestamp(status.get('StartedAt')),
+                    'fixed_at': None,
+                    'status_names': [get_status_by_id(sid, config) for sid in status_ids],
+                    'category_names': [get_category_by_id(cid, config) for cid in status.get('CategoryID', [])]
+                })
+    
+    if not incidents_for_date:
         return render_template('incident_detail.html', 
                              date=date, 
                              incidents=[], 
-                             not_found=True)
+                             not_found=False)
     
     return render_template('incident_detail.html', 
                          date=date, 
-                         incidents=day_data['incidents'],
-                         status=day_data['status'])
+                         incidents=incidents_for_date)
 
 @app.route('/api/status')
 def api_status():

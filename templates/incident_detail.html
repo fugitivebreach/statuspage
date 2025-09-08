@@ -124,6 +124,47 @@
             color: #ff6b35;
             font-size: 1.1rem;
         }
+
+        .incident-description {
+            color: #cccccc;
+            margin: 1rem 0;
+            line-height: 1.6;
+        }
+
+        .incident-meta {
+            margin: 1rem 0;
+            padding: 1rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .incident-meta div {
+            margin-bottom: 0.5rem;
+        }
+
+        .incident-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .status-tag, .category-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-tag {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .category-tag {
+            background: rgba(255, 107, 53, 0.2);
+            color: #ff6b35;
+        }
     </style>
 </head>
 <body>
@@ -150,7 +191,7 @@
             <div class="incident-card {{ incident.type }}">
                 <div class="incident-header">
                     <div class="incident-title">{{ incident.title }}</div>
-                    <div class="incident-date">{{ date }}</div>
+                    <div class="incident-date">{{ incident.started_at }}</div>
                     <div class="incident-type {{ incident.type }}">
                         {% if incident.type == 'degraded' %}
                             Degraded Performance
@@ -165,6 +206,36 @@
                         {% endif %}
                     </div>
                 </div>
+                
+                <div class="incident-description">
+                    {{ incident.description }}
+                </div>
+                
+                <div class="incident-meta">
+                    <div>
+                        <strong>Reported by:</strong> {{ incident.by }}
+                    </div>
+                    {% if incident.fixed_at %}
+                    <div>
+                        <strong>Resolved:</strong> {{ incident.fixed_at }}
+                    </div>
+                    {% else %}
+                    <div style="color: #ff6b35;">
+                        <strong>Status:</strong> Ongoing
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {% if incident.status_names or incident.category_names %}
+                <div class="incident-tags">
+                    {% for status_name in incident.status_names %}
+                    <span class="status-tag">{{ status_name }}</span>
+                    {% endfor %}
+                    {% for category_name in incident.category_names %}
+                    <span class="category-tag">{{ category_name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </div>
             {% endfor %}
         {% endif %}
