@@ -49,6 +49,15 @@
       "StatusTitle": "All Systems Operational",
       "StatusDescription": "All services are running normally with no reported issues.",
       "By": "ffugitivebbreach",
+      "StatusID": [6, 3],
+      "CategoryID": [2],
+      "StartedAt": 1757470616,
+      "FixedAt": null
+    },
+    {
+      "StatusTitle": "Fixing Miscellaneous Command Category",
+      "StatusDescription": "All services are running normally with no reported issues.",
+      "By": "ffugitivebbreach",
       "StatusID": [1],
       "CategoryID": [1, 2, 4, 5],
       "StartedAt": 1725835530,
