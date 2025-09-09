@@ -56,7 +56,7 @@
     },
     {
       "StatusTitle": "Fixing Miscellaneous Command Category",
-      "StatusDescription": "All services are running normally with no reported issues.",
+      "StatusDescription": "All services EXCEPT the /commands command category 'miscellaneous' will not be functional until resolved.",
       "By": "ffugitivebbreach",
       "StatusID": [6, 3],
       "CategoryID": [2],
