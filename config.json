@@ -74,15 +74,6 @@
       "StartedAt": 1757271600,
       "FixedAt": 1757278800
     },
-        {
-      "StatusTitle": "Fixing Miscellaneous Command Category",
-      "StatusDescription": "A̶l̶l̶ ̶s̶e̶r̶v̶i̶c̶e̶s̶ ̶E̶X̶C̶E̶P̶T̶ ̶t̶h̶e̶ ̶/̶c̶o̶m̶m̶a̶n̶d̶s̶ ̶c̶o̶m̶m̶a̶n̶d̶ ̶c̶a̶t̶e̶g̶o̶r̶y̶ ̶'̶m̶i̶s̶c̶e̶l̶l̶a̶n̶e̶o̶u̶s̶'̶ ̶w̶i̶l̶l̶ ̶n̶o̶t̶ ̶b̶e̶ ̶f̶u̶n̶c̶t̶i̶o̶n̶a̶l̶ ̶u̶n̶t̶i̶l̶ ̶r̶e̶s̶o̶l̶v̶e̶d̶. The issue was successfully resolved",
-      "By": "ffugitivebbreach",
-      "StatusID": [6, 3, 1],
-      "CategoryID": [2],
-      "StartedAt": 1757452616,
-      "FixedAt": 1757453176
-    }
     {
       "StatusTitle": "Fixing Miscellaneous Command Category",
       "StatusDescription": "A̶l̶l̶ ̶s̶e̶r̶v̶i̶c̶e̶s̶ ̶E̶X̶C̶E̶P̶T̶ ̶t̶h̶e̶ ̶/̶c̶o̶m̶m̶a̶n̶d̶s̶ ̶c̶o̶m̶m̶a̶n̶d̶ ̶c̶a̶t̶e̶g̶o̶r̶y̶ ̶'̶m̶i̶s̶c̶e̶l̶l̶a̶n̶e̶o̶u̶s̶'̶ ̶w̶i̶l̶l̶ ̶n̶o̶t̶ ̶b̶e̶ ̶f̶u̶n̶c̶t̶i̶o̶n̶a̶l̶ ̶u̶n̶t̶i̶l̶ ̶r̶e̶s̶o̶l̶v̶e̶d̶. The issue was successfully resolved",
