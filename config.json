@@ -60,8 +60,8 @@
       "StatusTitle": "VPS Server Crash",
       "StatusDescription": "Temporary VPS server crash was handled and the bot should now recieve uptime.",
       "By": "ffugitivebbreach",
-      "StatusID": [3, 6],
-      "CategoryID": [4],
+      "StatusID": [6, 4, 1],
+      "CategoryID": [2],
       "StartedAt": 1759068244,
       "FixedAt": 1759068244
     },
