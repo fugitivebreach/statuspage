@@ -53,6 +53,15 @@
       "CategoryID": [1, 2, 4, 5],
       "StartedAt": 1757470616,
       "FixedAt": null
+    },
+    {
+      "StatusTitle": "AWS Database Disruption (us-east-1)",
+      "StatusDescription": "We are currently experiencing degraded performance and potential major outages due to an Amazon AWS database issue affecting the us-east-1 region. Some bot commands and data services may be slow or unresponsive. Our team is monitoring the situation and will restore full functionality as soon as AWS resolves the regional outage.",
+      "By": "ffugitivebbreach",
+      "StatusID": [2, 4],
+      "CategoryID": [4],
+      "StartedAt": 1757470616,
+      "FixedAt": null
     }
   ],
   "PastIncidents": [
