@@ -53,7 +53,7 @@
       "CategoryID": [1, 2, 4, 5],
       "StartedAt": 1757470616,
       "FixedAt": null
-    },
+    }
   ],
   "PastIncidents": [
     {
@@ -64,7 +64,7 @@
       "CategoryID": [4],
       "StartedAt": 1760976619,
       "FixedAt": 1750371000
-    }
+    },
     {
       "StatusTitle": "VPS Server Crash",
       "StatusDescription": "Temporary VPS server crash was handled and the bot should now recieve uptime.",
