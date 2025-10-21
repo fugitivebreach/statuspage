@@ -54,17 +54,17 @@
       "StartedAt": 1757470616,
       "FixedAt": null
     },
+  ],
+  "PastIncidents": [
     {
       "StatusTitle": "AWS Database Disruption (us-east-1)",
       "StatusDescription": "We are currently experiencing degraded performance and potential major outages due to an Amazon AWS database issue affecting the us-east-1 region. Some bot commands and data services may be slow or unresponsive. Our team is monitoring the situation and will restore full functionality as soon as AWS resolves the regional outage.",
       "By": "ffugitivebbreach",
-      "StatusID": [2, 4],
+      "StatusID": [2, 4, 1],
       "CategoryID": [4],
       "StartedAt": 1760976619,
-      "FixedAt": null
+      "FixedAt": 1750371000
     }
-  ],
-  "PastIncidents": [
     {
       "StatusTitle": "VPS Server Crash",
       "StatusDescription": "Temporary VPS server crash was handled and the bot should now recieve uptime.",
